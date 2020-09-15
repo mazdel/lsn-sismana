@@ -1,4 +1,4 @@
-# LSN - Sismana | CodeIgniter 4
+# LSN - Sismana | CodeIgniter 4 Based Web Application
 
 ## What is CodeIgniter?
 
