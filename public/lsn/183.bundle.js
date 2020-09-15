@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[183],{245:function(a){a.exports=JSON.parse('[{"id":"197101","nama":"Bukitintan"},{"id":"197102","nama":"Taman Sari"},{"id":"197103","nama":"Pangkal Balam"},{"id":"197104","nama":"Rangkui"},{"id":"197105","nama":"Gerunggang"},{"id":"197106","nama":"Gabek"},{"id":"197107","nama":"Girimaya"}]')}}]);
