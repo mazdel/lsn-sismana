@@ -8,9 +8,9 @@ class Home extends BaseController
 	function __construct()
 	{
 		
-		$this->config 	= config('App',false);
+		$this->config	= config('App',false);
 		$this->access	= new Access();
-		$this->encrypt 	= new Encryption();
+		$this->encrypt = new Encryption();
 		
 		
 	}
@@ -25,8 +25,8 @@ class Home extends BaseController
 	{
 		$dbcreator = model('dbcreator');
 		
-		//$data['debug'][] = $dbcreator->select()->getResultArray();
-		//return view('welcome_message',$data);
+		$data['debug'][] = $dbcreator->create();
+		return view('welcome_message',$data);
 	}
 	//--------------------------------------------------------------------
 

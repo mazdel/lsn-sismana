@@ -34,7 +34,7 @@ class Database extends \CodeIgniter\Database\Config
 		'hostname' => 'localhost',
 		'username' => 'root',
 		'password' => '',
-		'database' => 'sismana',
+		'database' => 'lsn_sismana',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => 'lsn_',
 		'pConnect' => false,
