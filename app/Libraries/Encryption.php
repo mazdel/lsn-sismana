@@ -8,14 +8,29 @@ class Encryption {
     {
         $this->encryption = config('App',false)->encryption;
         helper('encoder');
-    }
+    }    
+    /**
+     * oneway
+     *
+     * @param  string $data string tobe encrypted
+     * @return string
+     */
     public function oneway($data=null)
     {
         if (!empty($data)) {
 			return md5($this->encryption['secret'].$data);
 		}
 		return false;
-    }
+    }    
+    /**
+     * twoway
+     *
+     * @param  string $data input data
+     * @param  string $action (e)ncrypt or (d)ecrypt
+     * @param  string $s_key secret key
+     * @param  string $s_iv
+     * @return string
+     */
     public function twoway($data=null,$action='e',$s_key=null,$s_iv=null)
 	{
 		if (!empty($data)) {

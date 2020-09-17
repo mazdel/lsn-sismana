@@ -97,6 +97,16 @@ class Dbcreator extends Model{
                 'constraint'        =>'45',
                 'null'              =>true
             ],
+            'active'    =>[
+                'type'              =>'ENUM',
+                'constraint'        =>['Y','N'],
+                'default'           =>'Y'
+            ],
+            'deleted'    =>[
+                'type'              =>'ENUM',
+                'constraint'        =>['Y','N'],
+                'default'           =>'N'
+            ],
         ];
         $this->dbforge->addField($members);
         $this->dbforge->addPrimaryKey('id');

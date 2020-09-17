@@ -16,15 +16,18 @@ class Home extends BaseController
 	}
 	public function index()
 	{
+		$member = new \App\Models\Member();
+		$data['debug'][] = $member->show('all',null,'count');
 		$data['debug'][] = $this->encrypt->twoway('Q3VjblhkT1p0R1prazl2RjJMaXBvZz09','d');
 		$data['debug'][] = $this->access->test();
 		$data['debug'][] = '';
+		
 		return view('welcome_message',$data);
 	}
 	public function install()
 	{
-		$dbcreator = model('dbcreator');
-		
+		$dbcreator = new \App\Models\Dbcreator();
+		$member = new \App\Models\Member();
 		$data['debug'][] = $dbcreator->create();
 		return view('welcome_message',$data);
 	}
