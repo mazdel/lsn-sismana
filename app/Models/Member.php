@@ -5,7 +5,8 @@ use CodeIgniter\Model;
 class Member extends Model{
     public function __construct()
     {
-        $this->db = db_connect(null,false);
+        $db = db_connect(null,false);
+        $this->member = $db->table('member');
     }    
     /**
      * signin
@@ -17,6 +18,16 @@ class Member extends Model{
     public function signin($username=null,$password=null)
     {
         $result = false;
+        if(!empty($username) && isset($password)){    
+            $this->member->groupStart()
+                            ->where('username',$username)
+                            ->orWhere('nik',$username)
+                            ->orWhere('telp',$username)
+                        ->groupEnd()
+                        ->where('password',$password);
+            $pre_result =  $this->member->get()->getRowArray();
+            $result = !empty($pre_result)?$pre_result:false;
+        }
         return $result;
 
     }    
@@ -34,17 +45,16 @@ class Member extends Model{
      */
     public function show($find='all',$data=null,$method='normal',$pagination=false,$limit=20,$page=1)
     {
-        $member = $this->db->table('member');
         switch($find){
             case 'all':
                 break;
             default:
-                $member->where([$find=>$data]);
+                $this->member->where([$find=>$data]);
                 break;
         }
         switch ($method) {
             case 'normal':
-                $member->where([
+                $this->member->where([
                     'active'    =>'Y',
                     'deleted'   =>'N'
                     ]);
@@ -54,17 +64,17 @@ class Member extends Model{
                 if (!$pagination) {
                     $limit=null; $offset=0;
                 }
-                $member->getWhere(['deleted' => 'N'],$limit,$offset);
-                return $member->countAllResults();
+                $this->member->getWhere(['deleted' => 'N'],$limit,$offset);
+                return $this->member->countAllResults();
                 break;
             case 'recursive':
                 break;
         }
         if ($pagination) {
             $offset = $limit * ($page - 1);
-            $member->limit($limit,$offset);
+            $this->member->limit($limit,$offset);
         }
-        return $member->get()->getResultObject();
+        return $this->member->get()->getResultObject();
     }
     public function add($data=null)
     {

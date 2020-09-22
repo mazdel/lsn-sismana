@@ -15,11 +15,7 @@ class App extends BaseConfig
 	*/
 	
 	public $appname='Sismana';
-	/*
-	*	for encryption
-	*/
-	/// global secret and iv key, don't ever change this except before installation
-	public $encryption = array('secret' =>'mzd3l_k3y','iv' => 'mzd3l_1V');
+	
 
 	/*
 	|--------------------------------------------------------------------------
@@ -56,7 +52,8 @@ class App extends BaseConfig
 	| variable so that it is blank.
 	|
 	*/
-	public $indexPage = 'index.php';
+	public $indexPage = '';
+	//public $indexPage = 'index.php';
 
 	/*
 	|--------------------------------------------------------------------------

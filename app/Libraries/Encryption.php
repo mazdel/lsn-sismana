@@ -6,7 +6,7 @@
 class Encryption {
     public function __construct()
     {
-        $this->encryption = config('App',false)->encryption;
+        $this->encryption = config('Encryption',false)->encryption;
         helper('encoder');
     }    
     /**

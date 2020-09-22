@@ -33,4 +33,22 @@ class Validation
 	//--------------------------------------------------------------------
 	// Rules
 	//--------------------------------------------------------------------
+	public $signin = [
+		'username'	=>[
+			'label'	=>'Nama/NIK/No.telp anggota',
+			'rules'	=>'required'
+		],
+		'password'	=>[
+			'label'	=>'Kata sandi',
+			'rules'	=>'required'
+		]
+	];
+	public $signin_errors = [
+		'username'	=> [
+			'required'	=> '{field} harus di isi',
+		],
+		'password' => [
+			'required'	=> '{field} harus di isi',
+		]
+	];
 }
