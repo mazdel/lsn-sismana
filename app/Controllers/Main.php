@@ -3,7 +3,7 @@
 use App\Libraries\Access;
 use App\Libraries\Encryption;
 
-class Home extends BaseController
+class Main extends BaseController
 {
 	function __construct()
 	{
@@ -18,9 +18,12 @@ class Home extends BaseController
 	public function index()
 	{
 		$data['debug']=$this->data;
-		//return redirect()->to('lsn/');
-		//return $this->response->setJSON($data)->setHeader('Location',base_url('lsn/'));
 		return view('lsn/index',$data);
+	}
+	public function dashboard()
+	{
+		$data['debug']=$this->data;
+		return view('lsn/dashboard',$data);
 	}
 	public function install()
 	{

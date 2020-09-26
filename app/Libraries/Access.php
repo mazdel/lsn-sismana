@@ -17,15 +17,21 @@ class Access {
     }
     public function signin($username=null,$password=null)
     {
-        $result = false;
-        $session = session();
+        $session            = session();
+        $result['status']   = false;
+        $result['data']     = 'Pengguna atau kata sandi tidak ditemukan';
+
         if(!empty($username) && isset($password)){
             $password = $this->encryption->oneway($password);
-            $member = $this->member->signin($username,$password);
-            if($member){
-                $sess_data['signedin'] = $member;
+            $memberIn = $this->member->signin($username,$password);
+            if($memberIn){
+                unset($memberIn['password']);
+                unset($memberIn['active']);
+                unset($memberIn['deleted']);
+                $sess_data['signedin']  = $memberIn;
                 $session->set($sess_data);
-                $result = $member;
+                $result['status']       = true;
+                $result['data']         = $memberIn;
             }
         }
         return $result;
