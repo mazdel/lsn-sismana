@@ -12,8 +12,8 @@ class Encryption {
     /**
      * oneway
      *
-     * @param  string $data string tobe encrypted
-     * @return string
+     * @param   string $data string tobe encrypted
+     * @return  string
      */
     public function oneway($data=null)
     {

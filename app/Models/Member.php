@@ -5,9 +5,9 @@ use CodeIgniter\Model;
 class Member extends Model{
     public function __construct()
     {
-        $db = db_connect(null,false);
-        $this->member = $db->table('member');
-    }    
+        $this->db = db_connect(null,false);
+        $this->member = $this->db->table('member');
+    }   
     /**
      * signin
      *
@@ -75,9 +75,50 @@ class Member extends Model{
             $this->member->limit($limit,$offset);
         }
         return $this->member->get()->getResultObject();
-    }
+    }    
+    /**
+     * add
+     *
+     * @param  array $data array to be inserted into database
+     * @return void
+     */
     public function add($data=null)
     {
-        return false;
+        $encryption  =  new \App\Libraries\Encryption();
+        
+        if(empty($data)){
+            $result['data']     = 'no data';
+            $result['status']   = false;
+        }
+        $data['password'] = $encryption->oneway($data['password']);
+        $result['data'] = $this->member->insert($data);
+        if($this->db->error()>0){
+            $result['data']     = $this->db->error();
+            $result['status']   = false;
+        }
+        else{
+            $result['status'] = true;
+        }
+        return $result;
+    }    
+    /**
+     * is_registered
+     *
+     * @param  string $user username/NIK/phone to be checked
+     * @return void
+     */
+    public function is_registered($user)
+    {
+        $result = false;
+        if(!empty($user)){    
+            $this->member->groupStart()
+                            ->where('username',$user)
+                            ->orWhere('nik',$user)
+                            ->orWhere('telp',$user)
+                        ->groupEnd();
+            $pre_result =  $this->member->get()->getRowArray();
+            $result = !empty($pre_result)?true:false;
+        }
+        return $result;
     }
 }

@@ -19,7 +19,7 @@ class Access {
     {
         $session            = session();
         $result['status']   = false;
-        $result['data']     = 'Pengguna atau kata sandi tidak ditemukan';
+        $result['data']     = 'Pengguna dengan kata sandi tersebut tidak ditemukan';
 
         if(!empty($username) && isset($password)){
             $password = $this->encryption->oneway($password);

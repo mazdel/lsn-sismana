@@ -54,7 +54,8 @@ class Dbcreator extends Model{
             'nik'    =>[
                 'type'              =>'varchar',
                 'constraint'        =>'16',
-                'null'              =>false
+                'null'              =>false,
+                'unique'            =>true,
             ],
             'password'    =>[
                 'type'              =>'VARCHAR',
