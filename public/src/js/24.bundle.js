@@ -1,1 +1,1 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[24],{86:function(A){A.exports=JSON.parse('[{"id":"6501","nama":"KAB. BULUNGAN"},{"id":"6502","nama":"KAB. MALINAU"},{"id":"6503","nama":"KAB. NUNUKAN"},{"id":"6504","nama":"KAB. TANA TIDUNG"},{"id":"6571","nama":"KOTA TARAKAN"}]')}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[24],{109:function(A){A.exports=JSON.parse('[{"id":"6501","nama":"KAB. BULUNGAN"},{"id":"6502","nama":"KAB. MALINAU"},{"id":"6503","nama":"KAB. NUNUKAN"},{"id":"6504","nama":"KAB. TANA TIDUNG"},{"id":"6571","nama":"KOTA TARAKAN"}]')}}]);

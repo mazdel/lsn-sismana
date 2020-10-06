@@ -17,21 +17,28 @@ class Member extends Model{
      */
     public function signin($username=null,$password=null)
     {
+        $encryption = new \App\Libraries\Encryption();
+        $default_password = config('Sismana',false)->default_password;
+        $pre_result=[];
         $result = false;
+        
         if(!empty($username) && isset($password)){    
             $this->member->groupStart()
                             ->where('username',$username)
                             ->orWhere('nik',$username)
                             ->orWhere('telp',$username)
-                        ->groupEnd()
-                        ->where('password',$password);
+                        ->groupEnd();
+            if($this->ishave_password($username) || $password!=$default_password){
+                $password=$encryption->oneway($password);
+                $this->member->where('password',$password);
+            }
             $pre_result =  $this->member->get()->getRowArray();
+
             $result = !empty($pre_result)?$pre_result:false;
         }
         return $result;
-
     }    
-        
+    
     /**
      * show users from database
      *
@@ -118,6 +125,26 @@ class Member extends Model{
                         ->groupEnd();
             $pre_result =  $this->member->get()->getRowArray();
             $result = !empty($pre_result)?true:false;
+        }
+        return $result;
+    }    
+    /**
+     * ishave_password
+     * check is member have set a password or not
+     * @param  string $username
+     * @return boolean
+     */
+    public function ishave_password($username)
+    {
+        $result = false;
+        if(!empty($user)){    
+            $this->member->groupStart()
+                            ->where('username',$user)
+                            ->orWhere('nik',$user)
+                            ->orWhere('telp',$user)
+                        ->groupEnd();
+            $password =  $this->member->get()->getRowArray()['password'];
+            $result = !empty($password)?true:false;
         }
         return $result;
     }

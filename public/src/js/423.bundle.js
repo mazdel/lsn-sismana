@@ -1,1 +1,1 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[423],{485:function(a){a.exports=JSON.parse('[{"id":"717401","nama":"Kotamobagu Utara"},{"id":"717402","nama":"Kotamobagu Timur"},{"id":"717403","nama":"Kotamobagu Selatan"},{"id":"717404","nama":"Kotamobagu Barat"}]')}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[423],{508:function(a){a.exports=JSON.parse('[{"id":"717401","nama":"Kotamobagu Utara"},{"id":"717402","nama":"Kotamobagu Timur"},{"id":"717403","nama":"Kotamobagu Selatan"},{"id":"717404","nama":"Kotamobagu Barat"}]')}}]);

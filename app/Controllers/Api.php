@@ -32,6 +32,7 @@ class Api extends BaseController
 			'response'	=> 'Tidak ada data yang terkirim'
 		];
 		$this->validation->setRules(
+			/*rules */
 			[
 				'nik'	=>[
 					'label'	=>'NIK',
@@ -54,13 +55,14 @@ class Api extends BaseController
 					'rules'	=>'required'
 				],
 			],
+			/*rules messages */
 			[
 				'nik'	=> [
 					'required'		=> '{field} harus diisi',
 					'min_length'	=> '{field} harus berjumlah {param} digit',
 					'max_length'	=> '{field} harus berjumlah {param} digit',
 					'is_natural'	=> '{field} harus berupa angka',
-					'is_registered'	=> '{field} sudah terdaftar'
+					'is_registered'	=> '{field} sudah terdaftar, silahkan untuk menggunakan {field} lainnya'
 				],
 				'nama'	=> [
 					'required'		=> '{field} harus diisi',
@@ -80,7 +82,7 @@ class Api extends BaseController
 		);
 		
 		$request_data 		= $this->request->getJSON(true);
-		$response = $request_data;
+		
 		if(!empty($request_data)){
 			$data['status'] = false;
 			$data['response'] = $request_data;
@@ -116,19 +118,21 @@ class Api extends BaseController
 			[
 				'username'	=>[
 					'label'	=>'Nama/NIK/No.telp anggota',
-					'rules'	=>'required'
+					'rules'	=>'required|ismember_exist'
 				],
 				'password'	=>[
 					'label'	=>'Kata sandi',
-					'rules'	=>'required'
+					'rules'	=>'required|ispassword_right[username]'
 				]
 			],
 			[
 				'username'	=> [
-					'required'	=> '{field} harus diisi',
+					'required'			=> '{field} harus diisi',
+					'ismember_exist'	=> '{field} belum terdaftar'
 				],
 				'password' => [
-					'required'	=> '{field} harus diisi',
+					'required'			=> '{field} harus diisi',
+					'ispassword_right'	=>	'{field} untuk {param} tidak tepat'
 				]
 			]
 		);
@@ -149,6 +153,7 @@ class Api extends BaseController
 			}
 			else{
 				$data['response'] 	= $this->validation->getErrors();
+				
 			}
 		}
 		return $this->response->setJSON($data);

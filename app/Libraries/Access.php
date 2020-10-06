@@ -22,9 +22,11 @@ class Access {
         $result['data']     = 'Pengguna dengan kata sandi tersebut tidak ditemukan';
 
         if(!empty($username) && isset($password)){
-            $password = $this->encryption->oneway($password);
             $memberIn = $this->member->signin($username,$password);
             if($memberIn){
+                if(empty($memberIn['password'])){
+                    $memberIn['empty_password'] = true;
+                }
                 unset($memberIn['password']);
                 unset($memberIn['active']);
                 unset($memberIn['deleted']);

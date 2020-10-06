@@ -1,1 +1,1 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[146],{208:function(a){a.exports=JSON.parse('[{"id":"161201","nama":"Talang Ubi"},{"id":"161202","nama":"Penukal Utara"},{"id":"161203","nama":"Penukal"},{"id":"161204","nama":"Abab"},{"id":"161205","nama":"Tanah Abang"}]')}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[146],{231:function(a){a.exports=JSON.parse('[{"id":"161201","nama":"Talang Ubi"},{"id":"161202","nama":"Penukal Utara"},{"id":"161203","nama":"Penukal"},{"id":"161204","nama":"Abab"},{"id":"161205","nama":"Tanah Abang"}]')}}]);

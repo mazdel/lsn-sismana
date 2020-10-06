@@ -1,1 +1,1 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[407],{469:function(a){a.exports=JSON.parse('[{"id":"650401","nama":"Sesayap"},{"id":"650402","nama":"Sesayap Hilir"},{"id":"650403","nama":"Tana Lia"},{"id":"650404","nama":"Betayau"},{"id":"650405","nama":"Muruk Rian"}]')}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[407],{492:function(a){a.exports=JSON.parse('[{"id":"650401","nama":"Sesayap"},{"id":"650402","nama":"Sesayap Hilir"},{"id":"650403","nama":"Tana Lia"},{"id":"650404","nama":"Betayau"},{"id":"650405","nama":"Muruk Rian"}]')}}]);

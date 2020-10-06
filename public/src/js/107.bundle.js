@@ -1,1 +1,1 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[107],{169:function(a){a.exports=JSON.parse('[{"id":"137401","nama":"Padang Panjang Timur"},{"id":"137402","nama":"Padang Panjang Barat"}]')}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[107],{192:function(a){a.exports=JSON.parse('[{"id":"137401","nama":"Padang Panjang Timur"},{"id":"137402","nama":"Padang Panjang Barat"}]')}}]);

@@ -1,1 +1,1 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[326],{388:function(a){a.exports=JSON.parse('[{"id":"520801","nama":"Tanjung"},{"id":"520802","nama":"Gangga"},{"id":"520803","nama":"Kayangan"},{"id":"520804","nama":"Bayan"},{"id":"520805","nama":"Pemenang"}]')}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[326],{411:function(a){a.exports=JSON.parse('[{"id":"520801","nama":"Tanjung"},{"id":"520802","nama":"Gangga"},{"id":"520803","nama":"Kayangan"},{"id":"520804","nama":"Bayan"},{"id":"520805","nama":"Pemenang"}]')}}]);

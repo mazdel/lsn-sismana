@@ -60,7 +60,7 @@ class Dbcreator extends Model{
             'password'    =>[
                 'type'              =>'VARCHAR',
                 'constraint'        =>'45',
-                'null'              =>false
+                'null'              =>true
             ],
             'telp'    =>[
                 'type'              =>'varchar',

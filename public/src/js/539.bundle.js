@@ -1,1 +1,1 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[539],{601:function(a){a.exports=JSON.parse('[{"id":"912801","nama":"Tigi"},{"id":"912802","nama":"Tigi Timur"},{"id":"912803","nama":"Bowobado"},{"id":"912804","nama":"Tigi Barat"},{"id":"912805","nama":"Kapiraya"}]')}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[539],{624:function(a){a.exports=JSON.parse('[{"id":"912801","nama":"Tigi"},{"id":"912802","nama":"Tigi Timur"},{"id":"912803","nama":"Bowobado"},{"id":"912804","nama":"Tigi Barat"},{"id":"912805","nama":"Kapiraya"}]')}}]);
