@@ -92,6 +92,11 @@ class Dbcreator extends Model{
                 'constraint'        =>'60',
                 'null'              =>false
             ],
+            'gender'    =>[
+                'type'              =>'ENUM',
+                'constraint'        =>['L','P'],
+                'default'           =>'L'
+            ],
             'tgl_gabung datetime not null default current_timestamp',
             'foto_profil'    =>[
                 'type'              =>'VARCHAR',

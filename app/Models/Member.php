@@ -45,19 +45,25 @@ class Member extends Model{
      * @param  string $find what column are you looking for
      * @param  string $data data that you want to find
      * @param  string $method normal/count/recursive
-     * @param  boolean $pagination true|false
+     * @param  string $sort asc|dsc
      * @param  int $limit 
      * @param  int $page
-     * @return void
+     * @return array
      */
-    public function show($find='all',$data=null,$method='normal',$pagination=false,$limit=20,$page=1)
+    public function show($find='all',$data=null,$method='normal',$sort='asc',$limit=null,$page=0)
     {
         switch($find){
             case 'all':
+                $sortBy = 'nama';
                 break;
             default:
+                $sortBy = $find;
                 $this->member->where([$find=>$data]);
                 break;
+        }
+        if (!empty($limit) && !empty($page)) {
+            $offset = $limit * ($page - 1);
+            $this->member->limit($limit,($offset<0?0:$offset));
         }
         switch ($method) {
             case 'normal':
@@ -67,21 +73,14 @@ class Member extends Model{
                     ]);
                 break;
             case 'count':
-                $offset = $limit * ($page - 1);
-                if (!$pagination) {
-                    $limit=null; $offset=0;
-                }
-                $this->member->getWhere(['deleted' => 'N'],$limit,$offset);
+                $this->member->getWhere(['deleted' => 'N']);
                 return $this->member->countAllResults();
                 break;
             case 'recursive':
                 break;
         }
-        if ($pagination) {
-            $offset = $limit * ($page - 1);
-            $this->member->limit($limit,$offset);
-        }
-        return $this->member->get()->getResultObject();
+        $this->member->orderBy($sortBy,$sort);
+        return $this->member->get()->getResultArray();
     }    
     /**
      * add
@@ -97,17 +96,56 @@ class Member extends Model{
             $result['data']     = 'no data';
             $result['status']   = false;
         }
-        $data['password'] = $encryption->oneway($data['password']);
-        $result['data'] = $this->member->insert($data);
-        if($this->db->error()>0){
-            $result['data']     = $this->db->error();
-            $result['status']   = false;
+        if(!empty($data['password']) || strlen($data['password'])>0){
+            $data['password'] = $encryption->oneway($data['password']);
+        }else{
+            $data['password'] = NULL;
         }
-        else{
+        $result['data'] = $this->member->insert($data);
+        $dberror = $this->db->error();
+        if($dberror['code']>0){
+            $result['data']     = $dberror;
+            $result['status']   = false;
+        }else{
             $result['status'] = true;
         }
         return $result;
     }    
+    /**
+     * edit
+     *
+     * @param int $id id member
+     * @param mixed $data
+     * @return array
+     */
+    public function edit(int $id=null,$data=null)
+    {
+        $encryption  =  new \App\Libraries\Encryption();
+
+        if(empty($data) || empty($id)){
+            $result['data']     = 'no data';
+            $result['status']   = false;
+            return $result;
+        }
+        if(isset($data['password'])){
+            if(!empty($data['password']) || strlen($data['password'])>0){
+                $data['password'] = $encryption->oneway($data['password']);
+            }else{
+                $data['password'] = NULL;
+            }
+        }
+        $this->member->where('id',$id);
+        $result['data'] = $this->member->update($data);
+        
+        $dberror = $this->db->error();
+        if($dberror['code']>0){
+            $result['data']     = $dberror;
+            $result['status']   = false;
+        }else{
+            $result['status'] = true;
+        }
+        return $result;
+    } 
     /**
      * is_registered
      *

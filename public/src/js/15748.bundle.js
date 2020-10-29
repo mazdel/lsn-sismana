@@ -1,0 +1,1 @@
+(self.webpackChunklaskar_shalawat=self.webpackChunklaskar_shalawat||[]).push([[15748],{15748:a=>{"use strict";a.exports=JSON.parse('[{"id":"741001","nama":"Kulisusu"},{"id":"741002","nama":"Kambowa"},{"id":"741003","nama":"Bonegunu"},{"id":"741004","nama":"Kulisusu Barat"},{"id":"741005","nama":"Kulisusu Utara"},{"id":"741006","nama":"Wakorumba Utara"}]')}}]);

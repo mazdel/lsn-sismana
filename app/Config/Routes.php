@@ -30,8 +30,12 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Main::index');
+$routes->get('/', 'Main::index',['as'=>'main']);
 
+/*admin api route */
+$routes->add('api/admin','Admin::index');
+$routes->add('api/admin/(:segment)','Admin::$1');
+$routes->add('api/admin/(:segment)/(:num)','Admin::$1/$2');
 /**
  * --------------------------------------------------------------------
  * Additional Routing

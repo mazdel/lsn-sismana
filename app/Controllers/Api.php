@@ -24,6 +24,12 @@ class Api extends BaseController
 		$data['response'] = 'Nothing to see here :p';
 		return $this->response->setJSON($data);
 	}
+	///sampek sini dulu, ngantuk
+	public function getsession()
+	{
+		$data['signedin']=session('signedin');
+		return $this->response->setJSON($data);
+	}
 	public function signup()
 	{
 		$member = new \App\Models\Member();
@@ -94,6 +100,7 @@ class Api extends BaseController
 				if($result['status']=true){
 					$data['status'] = true;
 					$data['response'] = $result['data'];
+					$data['redirect'] = '#signin';
 				}
 				else{
 					$data['response']['error'] = $result['data'];
@@ -148,7 +155,7 @@ class Api extends BaseController
 				if($result['status']==true){
 					$data['status'] 	= true;
 					$data['response'] 	= 'Selamat Datang '.(!empty($result['data']['nama'])?$result['data']['nama']:$result['data']['username']);
-					$data['signedin'] 	= session()->signedin;
+					$data['redirect'] 	= 'main/dashboard';
 				}
 			}
 			else{
@@ -162,6 +169,7 @@ class Api extends BaseController
 	{
 		$data['status'] 	= false;
 		$data['response']	= 'Gagal sign out';
+		session_destroy();
 		unset($_SESSION);
 		if(empty(session()->signedin)){
 			$data['status'] 	= true;

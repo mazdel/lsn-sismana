@@ -17,11 +17,17 @@ class Main extends BaseController
 	}
 	public function index()
 	{
-		$data['debug']=$this->data;
+		$data=[];
+		//$data['debug']=$this->data;
 		return view('lsn/index',$data);
 	}
 	public function dashboard()
 	{
+		if(empty($this->session->signedin) OR $this->session->signedin['level']!='admin')
+		{
+			return redirect()->route('main');
+		}
+		$data=[];
 		$data['debug']=$this->data;
 		return view('lsn/dashboard',$data);
 	}
