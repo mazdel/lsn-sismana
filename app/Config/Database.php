@@ -32,9 +32,15 @@ class Database extends \CodeIgniter\Database\Config
 	public $default = [
 		'DSN'      => '',
 		'hostname' => 'localhost',
+		/* 
+		'username' => 'lsn',
+		'password' => 'Spls123',
+		'database' => 'laskarsh_sismana',
+		*/
 		'username' => 'root',
 		'password' => '',
 		'database' => 'lsn_sismana',
+		
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => 'lsn_',
 		'pConnect' => false,

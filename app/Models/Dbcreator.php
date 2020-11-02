@@ -57,6 +57,12 @@ class Dbcreator extends Model{
                 'null'              =>false,
                 'unique'            =>true,
             ],
+            'no_kta'    =>[
+                'type'              =>'varchar',
+                'constraint'        =>'16',
+                'null'              =>false,
+                'unique'            =>true,
+            ],
             'password'    =>[
                 'type'              =>'VARCHAR',
                 'constraint'        =>'45',
@@ -92,6 +98,15 @@ class Dbcreator extends Model{
                 'constraint'        =>'60',
                 'null'              =>false
             ],
+            'tempat_tgl_lahir'    =>[
+                'type'              =>'VARCHAR',
+                'constraint'        =>'100',
+                'null'              =>false
+            ],
+            'alamat'    =>[
+                'type'              =>'text',
+                'null'              =>true
+            ],
             'gender'    =>[
                 'type'              =>'ENUM',
                 'constraint'        =>['L','P'],
@@ -100,13 +115,18 @@ class Dbcreator extends Model{
             'tgl_gabung datetime not null default current_timestamp',
             'foto_profil'    =>[
                 'type'              =>'VARCHAR',
-                'constraint'        =>'45',
+                'constraint'        =>'100',
                 'null'              =>true
             ],
             'active'    =>[
                 'type'              =>'ENUM',
                 'constraint'        =>['Y','N'],
                 'default'           =>'Y'
+            ],
+            'verified'    =>[
+                'type'              =>'ENUM',
+                'constraint'        =>['Y','N'],
+                'default'           =>'N'
             ],
             'deleted'    =>[
                 'type'              =>'ENUM',
@@ -157,6 +177,15 @@ class Dbcreator extends Model{
         $dbConfig   = config('database',false)->default;
         //return $dbConfig['database'];
         if($this->db->query('use '.$dbConfig['database'])){
+            return true;
+        }
+        return false;
+    }
+    public function tb_check()
+    {
+        $member = new \App\Models\Member();
+        $result = $member->getdata();
+        if($result['status']==true){
             return true;
         }
         return false;

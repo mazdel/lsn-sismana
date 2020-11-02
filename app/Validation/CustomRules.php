@@ -21,6 +21,17 @@ class CustomRules
 		}
 		return true;
     }
+    public function isnik_exist($nik): bool
+	{
+        $member = new \App\Models\Member();
+        /* cek nik jika sudah terdaftar, maka validator mengembalikan respon false
+         * 
+        */
+		if($member->isnik_exist($nik)){
+			return false;
+		}
+		return true;
+    }
     public function ismember_exist($user)
     {
         $member = new \App\Models\Member();
@@ -45,5 +56,16 @@ class CustomRules
             $result = true;
         }
         return $result;
+    }
+    public function iskta_exist(int $kta): bool
+	{
+        $member = new \App\Models\Member();
+        /* cek nomor kta jika sudah terdaftar, maka validator mengembalikan respon false
+         * 
+        */
+		if($member->iskta_exist($kta)){
+			return false;
+		}
+		return true;
     }
 }

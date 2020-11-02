@@ -7,7 +7,45 @@ class Member extends Model{
     {
         $this->db = db_connect(null,false);
         $this->member = $this->db->table('member');
-    }   
+    }    
+    /**
+     * getdata
+     *
+     * @param  string $type
+     * @return array
+     */
+    public function getdata($type='general')
+    {
+        $member=$this->db->table('member');
+        $result['response']=[];
+        $result['status']=false;
+
+        /*dapetin data anggota tiap kabupaten */
+        $member ->select('domisili_kab')
+                ->selectCount('domisili_kab','amount')
+                ->groupBy('domisili_kab');
+        $result['response']['domisili_kab']=$member->get()->getResultArray();
+
+        /*dapetin data anggota tiap kecamatan */
+        $member ->select('domisili_kec,domisili_kab')
+                ->selectCount('domisili_kec','amount')
+                ->groupBy('domisili_kec');
+        $result['response']['domisili_kec']=$member->get()->getResultArray();
+
+        /*dapetin data anggota berdasarkan tanggal daftar */
+        $member ->select('DATE(tgl_gabung) as tgl_join')
+                ->selectCount('tgl_gabung','amount')
+                ->groupBy('tgl_join');
+        $result['response']['tgl_gabung']=$member->get()->getResultArray();
+        $dberror = $this->db->error();
+        if($dberror['code']>0){
+            $result['response']     = $dberror;
+            $result['status']   = false;
+        }else{
+            $result['status'] = true;
+        }
+        return $result;
+    }
     /**
      * signin
      *
@@ -38,7 +76,6 @@ class Member extends Model{
         }
         return $result;
     }    
-    
     /**
      * show users from database
      *
@@ -110,7 +147,36 @@ class Member extends Model{
             $result['status'] = true;
         }
         return $result;
-    }    
+    }
+    /**
+     * remove
+     *
+     * @param int $id id member
+     * @param boolean $destroy if you want to remove member permanently
+     * @return array
+     */
+    public function remove(int $id=null,$destroy=false)
+    {
+        if(empty($id)){
+            $result['data']     = 'no data';
+            $result['status']   = false;
+            return $result;
+        }
+        $this->member->where('id',$id);
+        if($destroy==true){
+            $result['data'] = $this->member->delete();
+        }else{
+            $result['data'] = $this->member->update(['deleted'=>'Y']);
+        }
+        $dberror = $this->db->error();
+        if($dberror['code']>0){
+            $result['data']     = $dberror;
+            $result['status']   = false;
+        }else{
+            $result['status'] = true;
+        }
+        return $result;
+    } 
     /**
      * edit
      *
@@ -166,6 +232,37 @@ class Member extends Model{
         }
         return $result;
     }    
+    /**
+     * isexist_kta
+     *
+     * @param  int $kta nomor kartu tanda anggota
+     * @return boolean
+     */
+    public function iskta_exist($kta)
+    {
+        $result = false;
+        if(!empty($kta)){    
+            $this->member->where('no_kta',$kta);
+            $pre_result =  $this->member->get()->getRowArray();
+            $result = !empty($pre_result)?true:false;
+        }
+        return $result;
+    }/**
+     * isexist_kta
+     *
+     * @param  int $kta nomor kartu tanda anggota
+     * @return boolean
+     */
+    public function isnik_exist($nik)
+    {
+        $result = false;
+        if(!empty($nik)){    
+            $this->member->where('nik',$nik);
+            $pre_result =  $this->member->get()->getRowArray();
+            $result = !empty($pre_result)?true:false;
+        }
+        return $result;
+    }
     /**
      * ishave_password
      * check is member have set a password or not

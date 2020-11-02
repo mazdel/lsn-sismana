@@ -17,13 +17,17 @@ class Main extends BaseController
 	}
 	public function index()
 	{
+		if(!empty($this->session->signedin))
+		{
+			return redirect()->to('main/dashboard');
+		}
 		$data=[];
 		//$data['debug']=$this->data;
 		return view('lsn/index',$data);
 	}
 	public function dashboard()
 	{
-		if(empty($this->session->signedin) OR $this->session->signedin['level']!='admin')
+		if(empty($this->session->signedin) /*OR $this->session->signedin['level']!='admin'*/)
 		{
 			return redirect()->route('main');
 		}
@@ -31,12 +35,19 @@ class Main extends BaseController
 		$data['debug']=$this->data;
 		return view('lsn/dashboard',$data);
 	}
+	public function signout()
+	{
+		session_destroy();
+		unset($_SESSION);
+		return redirect()->route('main');
+	}
 	public function install()
 	{
-
 		$dbcreator = new \App\Models\Dbcreator();
-		
-		$data['debug'][] = $dbcreator->create();
+		$data['debug'][]='done';
+		if($dbcreator->tb_check()!=true){
+			$data['debug'][] = $dbcreator->create();
+		}
 		return $this->response->setJSON($data);
 	}
 	//--------------------------------------------------------------------

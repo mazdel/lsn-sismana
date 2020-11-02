@@ -36,6 +36,10 @@ $routes->get('/', 'Main::index',['as'=>'main']);
 $routes->add('api/admin','Admin::index');
 $routes->add('api/admin/(:segment)','Admin::$1');
 $routes->add('api/admin/(:segment)/(:num)','Admin::$1/$2');
+/*anggota api route */
+$routes->add('api/anggota','Anggota::index');
+$routes->add('api/anggota/(:segment)','Anggota::$1');
+$routes->add('api/anggota/(:segment)/(:num)','Anggota::$1/$2');
 /**
  * --------------------------------------------------------------------
  * Additional Routing

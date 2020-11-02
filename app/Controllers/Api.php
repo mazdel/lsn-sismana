@@ -24,10 +24,32 @@ class Api extends BaseController
 		$data['response'] = 'Nothing to see here :p';
 		return $this->response->setJSON($data);
 	}
-	///sampek sini dulu, ngantuk
+	public function getdashboard()
+	{
+		$data['status'] 	= false;
+		$data['response']	= 'no data';
+		$member = new \App\Models\Member();
+		$data = $member->getdata();
+		return $this->response->setJSON($data);
+	}
 	public function getsession()
 	{
 		$data['signedin']=session('signedin');
+		/* agar selalu uptodate */
+		if(empty($data['signedin']['id'])){
+			return $this->response->setJSON($data);
+		}
+		$member = new \App\Models\Member();
+		$update = $member->show('id',$data['signedin']['id']);
+		foreach ($update as $key => $value) {
+			if(empty($value['password'])){
+				$update[$key]['password'] = false;
+			}else{
+				$update[$key]['password'] = true;
+			}
+		}
+		$data['signedin'] = $update[0];
+		session()->set($data);
 		return $this->response->setJSON($data);
 	}
 	public function signup()
@@ -42,7 +64,7 @@ class Api extends BaseController
 			[
 				'nik'	=>[
 					'label'	=>'NIK',
-					'rules'	=>'required|is_natural|min_length[16]|max_length[16]|is_registered'
+					'rules'	=>'required|is_natural|min_length[16]|max_length[16]|isnik_exist'
 				],
 				'nama'	=>[
 					'label'	=>'Nama',
@@ -60,6 +82,14 @@ class Api extends BaseController
 					'label'	=>'No. Telepon',
 					'rules'	=>'required'
 				],
+				'alamat'	=>[
+					'label'	=>'Alamat',
+					'rules'	=>'required'
+				],
+				'tempat_tgl_lahir'	=>[
+					'label'	=>'Tempat, Tanggal Lahir',
+					'rules'	=>'required'
+				],
 			],
 			/*rules messages */
 			[
@@ -68,7 +98,7 @@ class Api extends BaseController
 					'min_length'	=> '{field} harus berjumlah {param} digit',
 					'max_length'	=> '{field} harus berjumlah {param} digit',
 					'is_natural'	=> '{field} harus berupa angka',
-					'is_registered'	=> '{field} sudah terdaftar, silahkan untuk menggunakan {field} lainnya'
+					'isnik_exist'	=> '{field} sudah terdaftar, silahkan untuk menggunakan {field} lainnya'
 				],
 				'nama'	=> [
 					'required'		=> '{field} harus diisi',
@@ -83,7 +113,13 @@ class Api extends BaseController
 				],
 				'telp'	=>[
 					'required'	=> '{field} harus diisi',
-				]
+				],
+				'alamat'	=> [
+					'required'		=> '{field} harus diisi',
+				],
+				'tempat_tgl_lahir'	=> [
+					'required'		=> '{field} harus diisi'
+				],
 			]
 		);
 		
@@ -173,7 +209,10 @@ class Api extends BaseController
 		unset($_SESSION);
 		if(empty(session()->signedin)){
 			$data['status'] 	= true;
-			$data['response']	= 'Signed Out';
+			$data['response']=array(
+				"message"	=> "signed out",
+				"redirect"	=> ''
+			);
 		}
 		return $this->response->setJSON($data);
 	}
