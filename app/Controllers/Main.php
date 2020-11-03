@@ -41,6 +41,11 @@ class Main extends BaseController
 		unset($_SESSION);
 		return redirect()->route('main');
 	}
+	public function iframe()
+	{
+		$data=[];
+		return view('lsn/iframe',$data);
+	}
 	public function install()
 	{
 		$dbcreator = new \App\Models\Dbcreator();
