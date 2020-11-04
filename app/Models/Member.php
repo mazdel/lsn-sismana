@@ -23,18 +23,21 @@ class Member extends Model{
         /*dapetin data anggota tiap kabupaten */
         $member ->select('domisili_kab')
                 ->selectCount('domisili_kab','amount')
+                ->where('deleted','N')
                 ->groupBy('domisili_kab');
         $result['response']['domisili_kab']=$member->get()->getResultArray();
 
         /*dapetin data anggota tiap kecamatan */
         $member ->select('domisili_kec,domisili_kab')
                 ->selectCount('domisili_kec','amount')
+                ->where('deleted','N')
                 ->groupBy('domisili_kec');
         $result['response']['domisili_kec']=$member->get()->getResultArray();
 
         /*dapetin data anggota berdasarkan tanggal daftar */
         $member ->select('DATE(tgl_gabung) as tgl_join')
                 ->selectCount('tgl_gabung','amount')
+                ->where('deleted','N')
                 ->groupBy('tgl_join');
         $result['response']['tgl_gabung']=$member->get()->getResultArray();
         $dberror = $this->db->error();
@@ -70,6 +73,10 @@ class Member extends Model{
                 $password=$encryption->oneway($password);
                 $this->member->where('password',$password);
             }
+            $this->member->where([
+                'active'    =>'Y',
+                'deleted'   =>'N'
+                ]);
             $pre_result =  $this->member->get()->getRowArray();
 
             $result = !empty($pre_result)?$pre_result:false;
@@ -226,7 +233,11 @@ class Member extends Model{
                             ->where('username',$user)
                             ->orWhere('nik',$user)
                             ->orWhere('telp',$user)
-                        ->groupEnd();
+                        ->groupEnd()
+                        ->where([
+                            'active'    =>'Y',
+                            'deleted'   =>'N'
+                            ]);
             $pre_result =  $this->member->get()->getRowArray();
             $result = !empty($pre_result)?true:false;
         }
@@ -242,7 +253,10 @@ class Member extends Model{
     {
         $result = false;
         if(!empty($kta)){    
-            $this->member->where('no_kta',$kta);
+            $this->member->where('no_kta',$kta)->where([
+                'active'    =>'Y',
+                'deleted'   =>'N'
+                ]);;
             $pre_result =  $this->member->get()->getRowArray();
             $result = !empty($pre_result)?true:false;
         }
@@ -257,7 +271,10 @@ class Member extends Model{
     {
         $result = false;
         if(!empty($nik)){    
-            $this->member->where('nik',$nik);
+            $this->member->where('nik',$nik)->where([
+                'active'    =>'Y',
+                'deleted'   =>'N'
+                ]);
             $pre_result =  $this->member->get()->getRowArray();
             $result = !empty($pre_result)?true:false;
         }
@@ -277,7 +294,11 @@ class Member extends Model{
                             ->where('username',$user)
                             ->orWhere('nik',$user)
                             ->orWhere('telp',$user)
-                        ->groupEnd();
+                        ->groupEnd()
+                        ->where([
+                            'active'    =>'Y',
+                            'deleted'   =>'N'
+                            ]);
             $password =  $this->member->get()->getRowArray()['password'];
             $result = !empty($password)?true:false;
         }
