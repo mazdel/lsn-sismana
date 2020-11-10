@@ -73,6 +73,8 @@
 
 /*! no static exports found */
 
+/*! xlsx.js (C) 2013-present SheetJS -- http://sheetjs.com */
+
 /*!**********************!*\
         !*** ./src/index.js ***!
         \**********************/

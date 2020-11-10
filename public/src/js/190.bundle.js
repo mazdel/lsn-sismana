@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[190],{275:function(n){n.exports=JSON.parse('[{"id":"217201","nama":"Tanjung Pinang Barat"},{"id":"217202","nama":"Tanjung Pinang Timur"},{"id":"217203","nama":"Tanjung Pinang Kota"},{"id":"217204","nama":"Bukit Bestari"}]')}}]);

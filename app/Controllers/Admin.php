@@ -28,7 +28,6 @@ class Admin extends BaseController
 		$data['response'] = 'Selamat datang di segment admin';
 		return $this->response->setJSON($data);
 	}
-
 	public function getmember()
 	{
 		$member = new \App\Models\Member();
@@ -66,6 +65,12 @@ class Admin extends BaseController
 		$data['paging']['page']=$page;
 		$data['paging']['pages']=ceil($data['paging']['dataLength'] / $count);
 		$data['response']= $result;
+		return $this->response->setJSON($data);
+	}
+	public function downloadmember()
+	{
+		$member = new \App\Models\Member();
+		$data = $member->downloadXlsMember(true);
 		return $this->response->setJSON($data);
 	}
 	public function addmember()

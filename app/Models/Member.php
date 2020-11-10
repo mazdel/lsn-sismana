@@ -84,6 +84,27 @@ class Member extends Model{
         return $result;
     }    
     /**
+     *
+     * downloadMember
+     *
+     * @param  boolean $withHeader export the field names too/not
+     * @return array
+     */
+    public function downloadXlsMember($withHeader = false)
+    {
+        $tbValues = $this->member->get()->getResultArray();
+        
+        /*second approach */
+        foreach ($tbValues as $key => $value) {
+            if(empty($tbValues[$key]['no_kta'])){
+                $tbValues[$key]['no_kta'] = $tbValues[$key]['domisili_kec'].$tbValues[$key]['id'];
+            }
+        }
+        $result['daftar_anggota'] = $tbValues;
+        
+        return $result;
+    }
+    /**
      * show users from database
      *
      * @param  string $find what column are you looking for
