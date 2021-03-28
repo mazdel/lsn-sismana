@@ -1,50 +1,55 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Member extends Model{
+class Member extends Model
+{
     public function __construct()
     {
-        $this->db = db_connect(null,false);
+        $this->db = db_connect(null, false);
         $this->member = $this->db->table('member');
-    }    
+    }
     /**
      * getdata
      *
      * @param  string $type
      * @return array
      */
-    public function getdata($type='general')
+    public function getdata($type = 'general')
     {
-        $member=$this->db->table('member');
-        $result['response']=[];
-        $result['status']=false;
-
+        $member = $this->db->table('member');
+        $result['response'] = [];
+        $result['status'] = false;
+        if ($member->select('*')->get() == false) {
+            return $result;
+        }
         /*dapetin data anggota tiap kabupaten */
-        $member ->select('domisili_kab')
-                ->selectCount('domisili_kab','amount')
-                ->where('deleted','N')
-                ->groupBy('domisili_kab');
-        $result['response']['domisili_kab']=$member->get()->getResultArray();
+        $member->select('domisili_kab')
+            ->selectCount('domisili_kab', 'amount')
+            ->where('deleted', 'N')
+            ->groupBy('domisili_kab');
+        $result['response']['domisili_kab'] = $member->get()->getResultArray();
 
         /*dapetin data anggota tiap kecamatan */
-        $member ->select('domisili_kec,domisili_kab')
-                ->selectCount('domisili_kec','amount')
-                ->where('deleted','N')
-                ->groupBy('domisili_kec');
-        $result['response']['domisili_kec']=$member->get()->getResultArray();
+        $member->select('domisili_kec,domisili_kab')
+            ->selectCount('domisili_kec', 'amount')
+            ->where('deleted', 'N')
+            ->groupBy('domisili_kec');
+        $result['response']['domisili_kec'] = $member->get()->getResultArray();
 
         /*dapetin data anggota berdasarkan tanggal daftar */
-        $member ->select('DATE(tgl_gabung) as tgl_join')
-                ->selectCount('tgl_gabung','amount')
-                ->where('deleted','N')
-                ->groupBy('tgl_join');
-        $result['response']['tgl_gabung']=$member->get()->getResultArray();
+        $member->select('DATE(tgl_gabung) as tgl_join')
+            ->selectCount('tgl_gabung', 'amount')
+            ->where('deleted', 'N')
+            ->groupBy('tgl_join');
+        $result['response']['tgl_gabung'] = $member->get()->getResultArray();
         $dberror = $this->db->error();
-        if($dberror['code']>0){
+        if ($dberror['code'] > 0) {
             $result['response']     = $dberror;
             $result['status']   = false;
-        }else{
+        } else {
             $result['status'] = true;
         }
         return $result;
@@ -56,33 +61,33 @@ class Member extends Model{
      * @param  string $password password of the user
      * @return void
      */
-    public function signin($username=null,$password=null)
+    public function signin($username = null, $password = null)
     {
         $encryption = new \App\Libraries\Encryption();
-        $default_password = config('Sismana',false)->default_password;
-        $pre_result=[];
+        $default_password = config('Sismana', false)->default_password;
+        $pre_result = [];
         $result = false;
-        
-        if(!empty($username) && isset($password)){    
+
+        if (!empty($username) && isset($password)) {
             $this->member->groupStart()
-                            ->where('username',$username)
-                            ->orWhere('nik',$username)
-                            ->orWhere('telp',$username)
-                        ->groupEnd();
-            if($this->ishave_password($username) || $password!=$default_password){
-                $password=$encryption->oneway($password);
-                $this->member->where('password',$password);
+                ->where('username', $username)
+                ->orWhere('nik', $username)
+                ->orWhere('telp', $username)
+                ->groupEnd();
+            if ($this->ishave_password($username) || $password != $default_password) {
+                $password = $encryption->oneway($password);
+                $this->member->where('password', $password);
             }
             $this->member->where([
-                'active'    =>'Y',
-                'deleted'   =>'N'
-                ]);
+                'active'    => 'Y',
+                'deleted'   => 'N'
+            ]);
             $pre_result =  $this->member->get()->getRowArray();
 
-            $result = !empty($pre_result)?$pre_result:false;
+            $result = !empty($pre_result) ? $pre_result : false;
         }
         return $result;
-    }    
+    }
     /**
      *
      * downloadMember
@@ -93,15 +98,15 @@ class Member extends Model{
     public function downloadXlsMember($withHeader = false)
     {
         $tbValues = $this->member->get()->getResultArray();
-        
+
         /*second approach */
         foreach ($tbValues as $key => $value) {
-            if(empty($tbValues[$key]['no_kta'])){
-                $tbValues[$key]['no_kta'] = $tbValues[$key]['domisili_kec'].$tbValues[$key]['id'];
+            if (empty($tbValues[$key]['no_kta'])) {
+                $tbValues[$key]['no_kta'] = $tbValues[$key]['domisili_kec'] . $tbValues[$key]['id'];
             }
         }
         $result['daftar_anggota'] = $tbValues;
-        
+
         return $result;
     }
     /**
@@ -115,27 +120,27 @@ class Member extends Model{
      * @param  int $page
      * @return array
      */
-    public function show($find='all',$data=null,$method='normal',$sort='asc',$limit=null,$page=0)
+    public function show($find = 'all', $data = null, $method = 'normal', $sort = 'asc', $limit = null, $page = 0)
     {
-        switch($find){
+        switch ($find) {
             case 'all':
                 $sortBy = 'nama';
                 break;
             default:
                 $sortBy = $find;
-                $this->member->where([$find=>$data]);
+                $this->member->where([$find => $data]);
                 break;
         }
         if (!empty($limit) && !empty($page)) {
             $offset = $limit * ($page - 1);
-            $this->member->limit($limit,($offset<0?0:$offset));
+            $this->member->limit($limit, ($offset < 0 ? 0 : $offset));
         }
         switch ($method) {
             case 'normal':
                 $this->member->where([
-                    'active'    =>'Y',
-                    'deleted'   =>'N'
-                    ]);
+                    'active'    => 'Y',
+                    'deleted'   => 'N'
+                ]);
                 break;
             case 'count':
                 $this->member->getWhere(['deleted' => 'N']);
@@ -144,34 +149,34 @@ class Member extends Model{
             case 'recursive':
                 break;
         }
-        $this->member->orderBy($sortBy,$sort);
+        $this->member->orderBy($sortBy, $sort);
         return $this->member->get()->getResultArray();
-    }    
+    }
     /**
      * add
      *
      * @param  array $data array to be inserted into database
      * @return void
      */
-    public function add($data=null)
+    public function add($data = null)
     {
         $encryption  =  new \App\Libraries\Encryption();
-        
-        if(empty($data)){
+
+        if (empty($data)) {
             $result['data']     = 'no data';
             $result['status']   = false;
         }
-        if(!empty($data['password']) || strlen($data['password'])>0){
+        if (!empty($data['password']) || strlen($data['password']) > 0) {
             $data['password'] = $encryption->oneway($data['password']);
-        }else{
+        } else {
             $data['password'] = NULL;
         }
         $result['data'] = $this->member->insert($data);
         $dberror = $this->db->error();
-        if($dberror['code']>0){
+        if ($dberror['code'] > 0) {
             $result['data']     = $dberror;
             $result['status']   = false;
-        }else{
+        } else {
             $result['status'] = true;
         }
         return $result;
@@ -183,28 +188,28 @@ class Member extends Model{
      * @param boolean $destroy if you want to remove member permanently
      * @return array
      */
-    public function remove(int $id=null,$destroy=false)
+    public function remove(int $id = null, $destroy = false)
     {
-        if(empty($id)){
+        if (empty($id)) {
             $result['data']     = 'no data';
             $result['status']   = false;
             return $result;
         }
-        $this->member->where('id',$id);
-        if($destroy==true){
+        $this->member->where('id', $id);
+        if ($destroy == true) {
             $result['data'] = $this->member->delete();
-        }else{
-            $result['data'] = $this->member->update(['deleted'=>'Y']);
+        } else {
+            $result['data'] = $this->member->update(['deleted' => 'Y']);
         }
         $dberror = $this->db->error();
-        if($dberror['code']>0){
+        if ($dberror['code'] > 0) {
             $result['data']     = $dberror;
             $result['status']   = false;
-        }else{
+        } else {
             $result['status'] = true;
         }
         return $result;
-    } 
+    }
     /**
      * edit
      *
@@ -212,34 +217,34 @@ class Member extends Model{
      * @param mixed $data
      * @return array
      */
-    public function edit(int $id=null,$data=null)
+    public function edit(int $id = null, $data = null)
     {
         $encryption  =  new \App\Libraries\Encryption();
 
-        if(empty($data) || empty($id)){
+        if (empty($data) || empty($id)) {
             $result['data']     = 'no data';
             $result['status']   = false;
             return $result;
         }
-        if(isset($data['password'])){
-            if(!empty($data['password']) || strlen($data['password'])>0){
+        if (isset($data['password'])) {
+            if (!empty($data['password']) || strlen($data['password']) > 0) {
                 $data['password'] = $encryption->oneway($data['password']);
-            }else{
+            } else {
                 $data['password'] = NULL;
             }
         }
-        $this->member->where('id',$id);
+        $this->member->where('id', $id);
         $result['data'] = $this->member->update($data);
-        
+
         $dberror = $this->db->error();
-        if($dberror['code']>0){
+        if ($dberror['code'] > 0) {
             $result['data']     = $dberror;
             $result['status']   = false;
-        }else{
+        } else {
             $result['status'] = true;
         }
         return $result;
-    } 
+    }
     /**
      * is_registered
      *
@@ -249,21 +254,21 @@ class Member extends Model{
     public function is_registered($user)
     {
         $result = false;
-        if(!empty($user)){    
+        if (!empty($user)) {
             $this->member->groupStart()
-                            ->where('username',$user)
-                            ->orWhere('nik',$user)
-                            ->orWhere('telp',$user)
-                        ->groupEnd()
-                        ->where([
-                            'active'    =>'Y',
-                            'deleted'   =>'N'
-                            ]);
+                ->where('username', $user)
+                ->orWhere('nik', $user)
+                ->orWhere('telp', $user)
+                ->groupEnd()
+                ->where([
+                    'active'    => 'Y',
+                    'deleted'   => 'N'
+                ]);
             $pre_result =  $this->member->get()->getRowArray();
-            $result = !empty($pre_result)?true:false;
+            $result = !empty($pre_result) ? true : false;
         }
         return $result;
-    }    
+    }
     /**
      * isexist_kta
      *
@@ -273,16 +278,17 @@ class Member extends Model{
     public function iskta_exist($kta)
     {
         $result = false;
-        if(!empty($kta)){    
-            $this->member->where('no_kta',$kta)->where([
-                'active'    =>'Y',
-                'deleted'   =>'N'
-                ]);;
+        if (!empty($kta)) {
+            $this->member->where('no_kta', $kta)->where([
+                'active'    => 'Y',
+                'deleted'   => 'N'
+            ]);;
             $pre_result =  $this->member->get()->getRowArray();
-            $result = !empty($pre_result)?true:false;
+            $result = !empty($pre_result) ? true : false;
         }
         return $result;
-    }/**
+    }
+    /**
      * isexist_kta
      *
      * @param  int $kta nomor kartu tanda anggota
@@ -291,13 +297,13 @@ class Member extends Model{
     public function isnik_exist($nik)
     {
         $result = false;
-        if(!empty($nik)){    
-            $this->member->where('nik',$nik)->where([
-                'active'    =>'Y',
-                'deleted'   =>'N'
-                ]);
+        if (!empty($nik)) {
+            $this->member->where('nik', $nik)->where([
+                'active'    => 'Y',
+                'deleted'   => 'N'
+            ]);
             $pre_result =  $this->member->get()->getRowArray();
-            $result = !empty($pre_result)?true:false;
+            $result = !empty($pre_result) ? true : false;
         }
         return $result;
     }
@@ -310,18 +316,18 @@ class Member extends Model{
     public function ishave_password($username)
     {
         $result = false;
-        if(!empty($user)){    
+        if (!empty($user)) {
             $this->member->groupStart()
-                            ->where('username',$user)
-                            ->orWhere('nik',$user)
-                            ->orWhere('telp',$user)
-                        ->groupEnd()
-                        ->where([
-                            'active'    =>'Y',
-                            'deleted'   =>'N'
-                            ]);
+                ->where('username', $user)
+                ->orWhere('nik', $user)
+                ->orWhere('telp', $user)
+                ->groupEnd()
+                ->where([
+                    'active'    => 'Y',
+                    'deleted'   => 'N'
+                ]);
             $password =  $this->member->get()->getRowArray()['password'];
-            $result = !empty($password)?true:false;
+            $result = !empty($password) ? true : false;
         }
         return $result;
     }

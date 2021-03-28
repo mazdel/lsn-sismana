@@ -1,4 +1,6 @@
-<?php namespace Config;
+<?php
+
+namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
 
@@ -9,9 +11,9 @@ class App extends BaseConfig
 	| Custom Config
 	|--------------------------------------------------------------------------
 	*/
-	
-	public $appname='Sismana';
-	
+
+	public $appname = 'Sismana';
+
 
 	/*
 	|--------------------------------------------------------------------------
@@ -29,15 +31,17 @@ class App extends BaseConfig
 	| environments.
 	|
 	*/
+
 	public $baseURL = 'http://localhost/';
 	public function __construct()
 	{
-		$protocol=((!empty($_SERVER['HTTPS'])&& $_SERVER['HTTPS']!='off')||$_SERVER['SERVER_PORT']==443)?'https://':'http://';
+		$_SESSION['CI_ENVIRONMENT'] = 'development';
+		$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
 		$hostname = $_SERVER['HTTP_HOST'];
-		$base_url = $protocol.$hostname.str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
+		$base_url = $protocol . $hostname . str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
 		$this->baseURL = $base_url;
 	}
-	
+
 	/*
 	|--------------------------------------------------------------------------
 	| Index File
